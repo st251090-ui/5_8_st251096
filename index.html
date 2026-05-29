@@ -3,44 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>森のブロックパズル - ジブリ風</title>
+    <title>森のブロックパズル</title>
     <style>
-        /* 全体の設定と背景グラデーション */
+        /* 全体の設定と背景（ナチュラルな生成り色と淡いグリーン） */
         body {
             margin: 0;
             padding: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 60%),
-                linear-gradient(to bottom, #7fb3d5 0%, #b2d5c5 40%, #5c8a5c 100%);
+            background-color: #eef2eb; /* より明るい森の朝のような色 */
+            background-image: 
+                radial-gradient(#d3dbce 2px, transparent 2px), 
+                radial-gradient(#d3dbce 2px, transparent 2px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
             font-family: 'Hiragino Maru Gothic ProN', 'Rounded M+ 1c', 'Quicksand', sans-serif;
-            color: #2c3e50;
+            color: #5c4a3d;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            touch-action: none; /* スマホでの意図しないスクロール防止 */
+            touch-action: none;
+            overflow: hidden;
         }
 
-        /* 全体を包むコンテナ */
+        /* 木（Tree）の装飾用の親コンテナ */
+        .wrapper-container {
+            position: relative;
+            padding: 0 80px; /* 左右に木を生やすスペースを十分に確保 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 全体を包むコンテナ（少し透けるすりガラス調） */
         .wrapper {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(92, 74, 61, 0.12);
             text-align: center;
-            border: 2px solid rgba(255,255,255,0.6);
+            border: 2px solid #e2dcd0;
             max-width: 100%;
             box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- 生やす木（CSS Tree）の強化デザイン --- */
+        .deco-tree {
+            position: absolute;
+            bottom: 25px; /* 地面から生えているように */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1;
+            transform-origin: bottom center;
+            animation: sway 6s ease-in-out infinite alternate;
+        }
+
+        /* 木の揺れアニメーション */
+        @keyframes sway {
+            0% { transform: rotate(-3deg) scale(1); }
+            100% { transform: rotate(4deg) scale(1.03); }
+        }
+
+        /* 木の位置とサイズ */
+        .tree-left-1 {
+            left: 10px;
+            animation-delay: 0s;
+        }
+        .tree-left-2 {
+            left: -35px;
+            animation-delay: -1.5s;
+            transform: scale(0.75);
+            opacity: 0.85;
+            bottom: 20px;
+        }
+        .tree-right-1 {
+            right: 10px;
+            animation-delay: -0.8s;
+        }
+        .tree-right-2 {
+            right: -35px;
+            animation-delay: -2.3s;
+            transform: scale(0.8);
+            opacity: 0.9;
+            bottom: 15px;
+        }
+
+        /* 葉っぱ部分（丸みを帯びた可愛いもこもこの木） */
+        .canopy-group {
+            position: relative;
+            width: 60px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .canopy-segment {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #84a87c;
+            box-shadow: inset -3px -3px 0 rgba(0,0,0,0.08);
+        }
+
+        /* もこもこを重ねて1本の木に見せる */
+        .seg-1 {
+            width: 40px;
+            height: 40px;
+            top: 0;
+            background-color: #a3c49c; /* 上部は少し明るい黄緑 */
+            z-index: 3;
+        }
+        .seg-2 {
+            width: 50px;
+            height: 50px;
+            top: 15px;
+            background-color: #84a87c;
+            z-index: 2;
+        }
+        .seg-3 {
+            width: 58px;
+            height: 58px;
+            top: 25px;
+            background-color: #6b8e5c; /* 下部は濃い緑 */
+            z-index: 1;
+        }
+
+        /* 幹部分 */
+        .trunk {
+            width: 12px;
+            height: 40px;
+            background-color: #8b7355;
+            border-radius: 4px;
+            box-shadow: inset -3px 0 0 rgba(0,0,0,0.15);
+            z-index: 0;
+            margin-top: -10px;
+        }
+
+        /* タイトル周辺のデザイン */
+        .title-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .title {
-            color: #2e5c31;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
-            margin: 0 0 20px 0;
+            color: #5c7d50;
+            text-shadow: 1px 1px 0px #fff;
+            margin: 0;
             font-size: 28px;
             letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .title-icon {
+            font-size: 24px;
+            animation: bounce 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
         }
 
         .game-area {
@@ -50,7 +179,7 @@
             align-items: flex-start;
         }
 
-        /* サイドパネル（スコア、Nextブロックなど） */
+        /* サイドパネル */
         .side-panel {
             display: flex;
             flex-direction: column;
@@ -59,41 +188,54 @@
         }
 
         .info-box {
-            background: #fdf5e6; /* 温かみのあるオフホワイト */
-            border: 3px solid #8b5a2b; /* 木の色 */
+            background: #faf8f5;
+            border: 2px solid #dcd5c6;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 2px 2px 8px rgba(92, 74, 61, 0.05);
+            position: relative;
+        }
+        
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px; right: 2px; bottom: 2px;
+            border: 1px dashed #e2dcd0;
             border-radius: 8px;
-            padding: 10px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+            pointer-events: none;
         }
 
         .info-box h2 {
             margin: 0 0 5px 0;
-            font-size: 14px;
-            color: #5c3a21;
+            font-size: 13px;
+            color: #8c7a6b;
+            font-weight: bold;
         }
 
         .info-box p {
             margin: 0;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            color: #2c3e50;
+            color: #5c7d50;
         }
 
         .controls-guide {
-            background: rgba(255, 255, 255, 0.6);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
+            background: #faf8f5;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 11px;
             text-align: left;
-            line-height: 1.5;
-            color: #444;
+            line-height: 1.6;
+            color: #7c6c5d;
+            border: 1px solid #e2dcd0;
         }
 
         .controls-guide h3 {
-            margin: 0 0 5px 0;
-            font-size: 14px;
-            color: #2e5c31;
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            color: #5c7d50;
             text-align: center;
+            font-weight: bold;
         }
 
         /* メインのゲーム盤 */
@@ -102,10 +244,10 @@
         }
 
         canvas {
-            background-color: rgba(25, 40, 25, 0.85); /* 深い森の夜のような色 */
-            border: 4px solid #8b5a2b;
-            border-radius: 8px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.3);
+            background-color: #2f362e; /* より深い森の影 */
+            border: 6px solid #8b7355; /* 木の枠を太く温かみのある太さに */
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.7), 3px 6px 15px rgba(0,0,0,0.15);
             display: block;
         }
 
@@ -118,38 +260,39 @@
 
         /* 木札風のボタン */
         button {
-            background: linear-gradient(to bottom, #a06b3c, #8b5a2b);
-            color: #fff;
-            border: 2px solid #4a2e15;
-            border-radius: 6px;
+            background: linear-gradient(to bottom, #9b8265, #7d6448);
+            color: #fffdfa;
+            border: 2px solid #5c4a3d;
+            border-radius: 8px;
             padding: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 0 #4e3d30, 0 5px 5px rgba(0,0,0,0.15);
             font-family: inherit;
             width: 100%;
             transition: all 0.1s;
+            letter-spacing: 2px;
         }
 
         button:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #4e3d30, 0 1px 2px rgba(0,0,0,0.15);
         }
 
-        /* オーバーレイ画面（ゲームオーバー、ポーズ） */
+        /* オーバーレイ画面 */
         .overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(46, 92, 49, 0.8);
-            border-radius: 8px;
+            background: rgba(244, 241, 234, 0.9);
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            backdrop-filter: blur(2px);
+            color: #5c4a3d;
+            backdrop-filter: blur(3px);
+            border: 6px solid transparent;
         }
 
         .overlay.hidden {
@@ -158,45 +301,76 @@
 
         .overlay h2 {
             font-size: 24px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #5c7d50;
         }
 
         .overlay button {
             width: 80%;
+            background: #6b8e5c;
+            border-color: #4a633f;
+            box-shadow: 0 4px 0 #3b5032, 0 5px 5px rgba(0,0,0,0.15);
+        }
+        
+        .overlay button:active {
+            box-shadow: 0 0px 0 #3b5032, 0 1px 2px rgba(0,0,0,0.15);
         }
 
         /* モバイル用オンスクリーンコントロール */
         .mobile-controls {
             display: none;
             margin-top: 20px;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
         }
 
         .mobile-controls button {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             padding: 0;
             font-size: 20px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.7);
-            color: #2e5c31;
-            border: 2px solid #2e5c31;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            text-shadow: none;
+            background: #faf8f5;
+            color: #8b7355;
+            border: 2px solid #8b7355;
+            box-shadow: 0 4px 0 #8b7355;
         }
         
         .mobile-controls button:active {
-            background: rgba(200,200,200,0.9);
+            background: #f4f1ea;
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #8b7355;
         }
 
         /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .wrapper-container {
+                padding: 0 20px; /* タブレットや狭い画面でも木を近づけて表示 */
+            }
+            .tree-left-2, .tree-right-2 {
+                display: none; /* 外側の木だけ隠す */
+            }
+        }
+
         @media (max-width: 600px) {
-            .game-area {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
+            .wrapper-container {
+                padding: 0 10px;
+            }
+            /* スマホではゲーム盤を優先するため、背景の木は非表示に */
+            .deco-tree {
+                display: none;
+            }
+            .wrapper {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            .title {
+                font-size: 22px;
+            }
+            .title-icon {
+                font-size: 20px;
             }
             .side-panel {
                 flex-direction: row;
@@ -205,10 +379,10 @@
                 gap: 10px;
             }
             .side-panel.left-panel {
-                order: 2; /* スマホではスコアを下に */
+                order: 2;
             }
             .side-panel.right-panel {
-                order: 1; /* Nextを上に */
+                order: 1;
             }
             .controls-guide {
                 display: none;
@@ -220,15 +394,17 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+                border-radius: 8px;
             }
             .info-box h2 {
-                font-size: 12px;
+                font-size: 11px;
             }
             .info-box p {
                 font-size: 18px;
             }
             #btn-start {
                 padding: 10px;
+                font-size: 14px;
             }
             .mobile-controls {
                 display: flex;
@@ -238,66 +414,109 @@
 </head>
 <body>
 
-<div class="wrapper">
-    <h1 class="title">森のブロックパズル</h1>
-    
-    <div class="game-area">
-        <!-- 左パネル -->
-        <div class="side-panel left-panel">
-            <div class="info-box">
-                <h2>スコア</h2>
-                <p id="score">0</p>
+<div class="wrapper-container">
+    <!-- 左に生える木々 -->
+    <div class="deco-tree tree-left-1">
+        <div class="canopy-group">
+            <div class="canopy-segment seg-3"></div>
+            <div class="canopy-segment seg-2"></div>
+            <div class="canopy-segment seg-1"></div>
+        </div>
+        <div class="trunk"></div>
+    </div>
+    <div class="deco-tree tree-left-2">
+        <div class="canopy-group">
+            <div class="canopy-segment seg-3" style="background-color: #5c7d50;"></div>
+            <div class="canopy-segment seg-2" style="background-color: #6b8e5c;"></div>
+            <div class="canopy-segment seg-1" style="background-color: #84a87c;"></div>
+        </div>
+        <div class="trunk" style="height: 50px;"></div>
+    </div>
+
+    <!-- メインパズル画面 -->
+    <div class="wrapper">
+        <div class="title-area">
+            <span class="title-icon">🌳</span>
+            <h1 class="title">森のブロックパズル</h1>
+            <span class="title-icon">🌲</span>
+        </div>
+        
+        <div class="game-area">
+            <!-- 左パネル -->
+            <div class="side-panel left-panel">
+                <div class="info-box">
+                    <h2>スコア</h2>
+                    <p id="score">0</p>
+                </div>
+                <div class="info-box">
+                    <h2>レベル</h2>
+                    <p id="level">1</p>
+                </div>
+                <div class="info-box">
+                    <h2>lines</h2>
+                    <p id="lines">0</p>
+                </div>
+                <div class="controls-guide">
+                    <h3>操作方法</h3>
+                    <p>◀ ▶ : 左右移動</p>
+                    <p>▲ : 回転</p>
+                    <p>▼ : 少し落とす</p>
+                    <p>Space : 一気に落とす</p>
+                    <p>P : 一時停止</p>
+                </div>
             </div>
-            <div class="info-box">
-                <h2>レベル</h2>
-                <p id="level">1</p>
+            
+            <!-- メインキャンバス -->
+            <div class="canvas-container">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+                
+                <div id="game-over" class="overlay hidden">
+                    <h2>ゲームオーバー</h2>
+                    <button onclick="resetGame()">もういちど</button>
+                </div>
+                
+                <div id="pause-screen" class="overlay hidden">
+                    <h2>一時停止中</h2>
+                    <button onclick="togglePause()">再開する</button>
+                </div>
             </div>
-            <div class="info-box">
-                <h2>ライン</h2>
-                <p id="lines">0</p>
-            </div>
-            <div class="controls-guide">
-                <h3>操作方法</h3>
-                <p>◀ ▶ : 左右移動</p>
-                <p>▲ : 回転</p>
-                <p>▼ : 少し落とす</p>
-                <p>Space : 一気に落とす</p>
-                <p>P : 一時停止</p>
+            
+            <!-- 右パネル -->
+            <div class="side-panel right-panel">
+                <div class="info-box" style="display: flex; flex-direction: column; align-items: center;">
+                    <h2>つぎの石</h2>
+                    <canvas id="nextCanvas" width="90" height="90"></canvas>
+                </div>
+                <button id="btn-start" onclick="togglePlay()">スタート</button>
             </div>
         </div>
         
-        <!-- メインキャンバス -->
-        <div class="canvas-container">
-            <canvas id="gameCanvas" width="300" height="600"></canvas>
-            
-            <div id="game-over" class="overlay hidden">
-                <h2>ゲームオーバー</h2>
-                <button onclick="resetGame()">もういちど</button>
-            </div>
-            
-            <div id="pause-screen" class="overlay hidden">
-                <h2>一時停止中</h2>
-                <button onclick="togglePause()">再開する</button>
-            </div>
-        </div>
-        
-        <!-- 右パネル -->
-        <div class="side-panel right-panel">
-            <div class="info-box" style="display: flex; flex-direction: column; align-items: center;">
-                <h2>つぎの石</h2>
-                <canvas id="nextCanvas" width="90" height="90"></canvas>
-            </div>
-            <button id="btn-start" onclick="togglePlay()">スタート</button>
+        <!-- モバイル用コントロール -->
+        <div class="mobile-controls">
+            <button id="m-left">◀</button>
+            <button id="m-rotate">↻</button>
+            <button id="m-right">▶</button>
+            <button id="m-down">▼</button>
+            <button id="m-drop">⏬</button>
         </div>
     </div>
-    
-    <!-- モバイル用コントロール -->
-    <div class="mobile-controls">
-        <button id="m-left">◀</button>
-        <button id="m-rotate">↻</button>
-        <button id="m-right">▶</button>
-        <button id="m-down">▼</button>
-        <button id="m-drop">⏬</button>
+
+    <!-- 右に生える木々 -->
+    <div class="deco-tree tree-right-1">
+        <div class="canopy-group">
+            <div class="canopy-segment seg-3" style="background-color: #6b8e5c;"></div>
+            <div class="canopy-segment seg-2" style="background-color: #84a87c;"></div>
+            <div class="canopy-segment seg-1" style="background-color: #a3c49c;"></div>
+        </div>
+        <div class="trunk"></div>
+    </div>
+    <div class="deco-tree tree-right-2">
+        <div class="canopy-group">
+            <div class="canopy-segment seg-3" style="background-color: #5c7d50;"></div>
+            <div class="canopy-segment seg-2" style="background-color: #6b8e5c;"></div>
+            <div class="canopy-segment seg-1" style="background-color: #84a87c;"></div>
+        </div>
+        <div class="trunk" style="height: 45px;"></div>
     </div>
 </div>
 
@@ -313,19 +532,19 @@
     const BLOCK_SIZE = 30; // ピクセル
     const NEXT_BLOCK_SIZE = 20;
 
-    // キャンバスのサイズを内部的にスケール（高解像度対応などは省略しシンプルに）
+    // キャンバスのサイズを内部的にスケール
     ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    // --- 色と形（ジブリ風のアースカラー＆魔法の色） ---
+    // --- 色と形（アースカラー・ナチュラルカラー） ---
     const COLORS = [
         null,
-        '#5D9B9B', // I: シアン（飛行石風のくすんだ青緑）
-        '#4A6B9C', // J: 青（夜空の色）
-        '#D97D43', // L: オレンジ（レンガ、夕暮れ）
-        '#E5C158', // O: 黄色（麦わら、真鍮）
-        '#5C8A5C', // S: 緑（苔、深い森）
-        '#805C8A', // T: 紫（魔法の結晶）
-        '#C45151'  // Z: 赤（赤い屋根、火）
+        '#8cb3c7', // I: 川のような水色
+        '#5e7a96', // J: 夜空のようなくすんだ青
+        '#d68d5e', // L: レンガ色・テラコッタ
+        '#e0c470', // O: 麦わらのような黄色
+        '#84a87c', // S: 若葉のような緑
+        '#9e7b9b', // T: ラベンダーのような紫
+        '#bd6363'  // Z: 木の実のような赤
     ];
 
     const SHAPES = [
@@ -360,7 +579,7 @@
 
     // --- 描画ユーティリティ ---
     
-    // 石（ブロック）を立体的・魔法的に描画する関数
+    // 石（ブロック）を木製おもちゃ風に描画する関数
     function drawBlock(context, x, y, colorId, size = 1) {
         if (colorId === 0) return;
         const color = COLORS[colorId];
@@ -369,10 +588,10 @@
         context.fillStyle = color;
         context.fillRect(x, y, size, size);
         
-        const h = size * 0.15; // ハイライト/シャドウの太さ
+        const h = size * 0.12; // 面取り（ベベル）の幅
         
-        // 上ハイライト（光が当たっている感じ）
-        context.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        // ハイライト（上と左） - 柔らかい光
+        context.fillStyle = 'rgba(255, 255, 255, 0.25)';
         context.beginPath();
         context.moveTo(x, y);
         context.lineTo(x + size, y);
@@ -380,8 +599,7 @@
         context.lineTo(x + h, y + h);
         context.fill();
         
-        // 左ハイライト
-        context.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        context.fillStyle = 'rgba(255, 255, 255, 0.15)';
         context.beginPath();
         context.moveTo(x, y);
         context.lineTo(x + h, y + h);
@@ -389,8 +607,8 @@
         context.lineTo(x, y + size);
         context.fill();
         
-        // 右シャドウ
-        context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        // シャドウ（下と右） - 落ち着いた影
+        context.fillStyle = 'rgba(0, 0, 0, 0.1)';
         context.beginPath();
         context.moveTo(x + size, y);
         context.lineTo(x + size, y + size);
@@ -398,17 +616,16 @@
         context.lineTo(x + size - h, y + h);
         context.fill();
         
-        // 下シャドウ
-        context.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        context.fillStyle = 'rgba(0, 0, 0, 0.2)';
         context.beginPath();
         context.moveTo(x, y + size);
         context.lineTo(x + size, y + size);
         context.lineTo(x + size - h, y + size - h);
         context.lineTo(x + h, y + size - h);
         context.fill();
-        
-        // 境界線（少し暗い色で引き締める）
-        context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+
+        // 枠線（焦茶色で木の質感を出す）
+        context.strokeStyle = 'rgba(92, 74, 61, 0.4)';
         context.lineWidth = size * 0.05;
         context.strokeRect(x, y, size, size);
     }
@@ -423,8 +640,8 @@
 
     // 盤面と操作中のピースを描画
     function draw() {
-        // 背景クリア
-        ctx.fillStyle = 'rgba(25, 40, 25, 1)';
+        // 背景クリア (深い森の緑色)
+        ctx.fillStyle = '#3b4238';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // 盤面のブロックを描画
@@ -607,7 +824,7 @@
         }
 
         if (rowCount > 0) {
-            // ジブリ風に、たくさん消すとボーナスが大きくなる
+            // ベーススコア
             const baseScore = [0, 100, 300, 500, 800];
             player.score += baseScore[rowCount] * player.level;
             player.lines += rowCount;
